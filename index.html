@@ -407,6 +407,56 @@
       .filter-bar { gap: .4rem; }
       .filter-btn { font-size: .72rem; padding: .3rem .75rem; }
     }
+
+    /* ==============================
+       MODAL PHOTO PIZZA
+    ============================== */
+    .pizza-card[data-img] { cursor: pointer; }
+    .pizza-icon {
+      position: absolute; right: .75rem; bottom: .75rem;
+      font-size: 1.1rem; opacity: .75;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .pizza-card[data-img]:hover .pizza-icon { opacity: 1; }
+
+    #pizza-modal {
+      display: none;
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    #pizza-modal.open { display: flex; }
+    .modal-inner {
+      position: relative;
+      max-width: 560px; width: 90%;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      animation: modalIn .22s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.93); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .modal-inner img {
+      width: 100%; display: block;
+      max-height: 60vh; object-fit: cover;
+    }
+    .modal-footer {
+      padding: .9rem 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-name { font-family: var(--ff-head); font-size: 1.15rem; color: var(--gold); }
+    .modal-close {
+      background: none; border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px;
+      padding: .35rem .8rem; cursor: pointer; font-size: .85rem;
+      transition: border-color .2s;
+    }
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
 <body>
@@ -511,7 +561,7 @@
     <div class="pizzas-grid" id="pizzasGrid">
 
       <!-- MARGHERITA -->
-      <div class="pizza-card" data-tags="veg">
+      <div class="pizza-card" data-tags="veg" data-img="margarita.jpg" data-name="Margherita">
         <div class="card-head">
           <span class="pizza-name">Margherita</span>
           <span class="pizza-price">10 €</span>
@@ -607,7 +657,7 @@
       </div>
 
       <!-- MONTAGNE -->
-      <div class="pizza-card" data-tags="veg fromage">
+      <div class="pizza-card" data-tags="veg fromage" data-img="montagne.jpg" data-name="Montagne">
         <div class="card-head">
           <span class="pizza-name">Montagne</span>
           <span class="pizza-price">14 €</span>
@@ -941,6 +991,17 @@
   </p>
 </footer>
 
+<!-- MODAL PHOTO PIZZA -->
+<div id="pizza-modal" role="dialog" aria-modal="true">
+  <div class="modal-inner">
+    <img id="modal-img" src="" alt="" />
+    <div class="modal-footer">
+      <span class="modal-name" id="modal-name"></span>
+      <button class="modal-close" id="modal-close">Fermer ✕</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============================================================
      SCRIPTS
 ============================================================ -->
@@ -971,6 +1032,36 @@ filterBtns.forEach(btn => {
       (f === 'all' || f === 'sig') ? '' : 'none';
   });
 });
+
+// ---- MODAL PHOTO PIZZA ----
+const modal      = document.getElementById('pizza-modal');
+const modalImg   = document.getElementById('modal-img');
+const modalName  = document.getElementById('modal-name');
+const modalClose = document.getElementById('modal-close');
+
+document.querySelectorAll('.pizza-card[data-img]').forEach(card => {
+  const icon = document.createElement('span');
+  icon.className = 'pizza-icon';
+  icon.textContent = '📷';
+  card.style.position = 'relative';
+  card.appendChild(icon);
+
+  card.addEventListener('click', () => {
+    modalImg.src      = card.dataset.img;
+    modalImg.alt      = card.dataset.name;
+    modalName.textContent = card.dataset.name;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+const closeModal = () => {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+};
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // ---- LEAFLET MAP ----
 const map = L.map('map', { center: [43.01, -0.085], zoom: 11, scrollWheelZoom: false });
