@@ -71,13 +71,15 @@
       font-family: var(--ff-head); font-style: italic;
       font-size: 1.15rem; color: var(--gold);
     }
-    .nav-brand img {
-      width: 36px; height: 36px; object-fit: contain;
+    .nav-logo-wrap {
+      display: inline-flex; width: 36px; height: 36px; flex-shrink: 0;
       border-radius: 50%; background: #0f0f0f;
       outline: 1.5px solid var(--gold);
+      overflow: hidden;
+    }
+    .nav-brand img {
+      width: 100%; height: 100%; object-fit: cover;
       filter: invert(1);
-      transform: scale(1.22);
-      clip-path: circle(50%);
     }
     .nav-links { display: flex; gap: 1.75rem; list-style: none; }
     .nav-links a {
@@ -415,7 +417,7 @@
 <nav>
   <div class="nav-inner">
     <a href="#hero" class="nav-brand">
-      <img src="logo.png" alt="" aria-hidden="true" />
+      <span class="nav-logo-wrap"><img src="logo.png" alt="" aria-hidden="true" /></span>
       La Pizzanéenne
     </a>
     <ul class="nav-links" id="navLinks">
