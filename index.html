@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Pizzanéenne — Pizzeria Itinérante des Hautes-Pyrénées</title>
+  <meta name="description" content="La Pizzanéenne, pizzeria itinérante dans les Hautes-Pyrénées. Pizzas semi-complètes au levain, faites maison. Arras en Lavedan, Esterre, Lugagnan, Lau Balagnas, Beaucens." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    /* ==============================
+       VARIABLES & RESET
+    ============================== */
+    :root {
+      --bg:        #0f0f0f;
+      --bg-card:   #1a1a1a;
+      --bg-alt:    #141414;
+      --gold:      #e8973e;
+      --gold-dim:  rgba(232,151,62,0.15);
+      --red:       #c0392b;
+      --red-dim:   rgba(192,57,43,0.15);
+      --green-dim: rgba(45,106,79,0.2);
+      --text:      #f0ebe2;
+      --muted:     #7a7060;
+      --border:    rgba(232,151,62,0.18);
+      --ff-head:   'Playfair Display', Georgia, serif;
+      --ff-body:   'Inter', system-ui, sans-serif;
+      --radius:    10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { background: var(--bg); color: var(--text); font-family: var(--ff-body); line-height: 1.65; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ==============================
+       UTILS
+    ============================== */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+    .label {
+      font-size: .7rem; font-weight: 600; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: var(--ff-head); font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.15; margin-bottom: .9rem;
+    }
+    .section-sub {
+      color: var(--muted); font-size: .95rem; max-width: 540px; margin-bottom: 3rem;
+    }
+    section { padding: 5rem 1.5rem; }
+
+    /* ==============================
+       NAV
+    ============================== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
+      background: rgba(15,15,15,.92); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; height: 62px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: var(--ff-head); font-style: italic;
+      font-size: 1.15rem; color: var(--gold);
+    }
+    .nav-brand img {
+      width: 36px; height: 36px; object-fit: contain;
+      border-radius: 50%; background: #0f0f0f;
+      outline: 1.5px solid var(--gold);
+      filter: invert(1);
+      transform: scale(1.22);
+      clip-path: circle(50%);
+    }
+    .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--text); transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--red); color: #fff !important; padding: .45rem 1.1rem;
+      border-radius: 5px; transition: background .2s !important;
+    }
+    .nav-cta:hover { background: #a93226 !important; }
+    .burger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .burger span { display: block; width: 23px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+
+    /* ==============================
+       HERO
+    ============================== */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 7rem 1.5rem 5rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #2a1605 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(192,57,43,.08) 0%, transparent 60%),
+        var(--bg);
+      position: relative; overflow: hidden;
+    }
+    .hero-logo-wrap {
+      width: 190px; height: 190px; border-radius: 50%;
+      background: #0f0f0f;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 50px rgba(232,151,62,.45), 0 0 0 1px rgba(232,151,62,.2);
+      overflow: hidden;
+      margin-bottom: 2.2rem;
+      animation: floatY 7s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    .hero-logo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      filter: invert(1);
+      transform: scale(1.22);
+    }
+    @keyframes floatY {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+    .hero-eyebrow {
+      font-size: .72rem; font-weight: 600; letter-spacing: .35em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+    }
+    .hero-h1 {
+      font-family: var(--ff-head); font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+      font-weight: 700; line-height: 1.05; margin-bottom: 1.2rem;
+    }
+    .hero-h1 em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-size: 1rem; color: var(--muted); max-width: 420px;
+      margin: 0 auto 2.6rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.8rem; }
+    .btn-red {
+      background: var(--red); color: #fff; padding: .85rem 2rem;
+      border-radius: 6px; font-weight: 600; font-size: .9rem;
+      border: 2px solid var(--red); transition: all .2s;
+    }
+    .btn-red:hover { background: transparent; color: var(--red); }
+    .btn-outline {
+      background: transparent; color: var(--text); padding: .85rem 2rem;
+      border-radius: 6px; font-weight: 500; font-size: .9rem;
+      border: 2px solid rgba(240,235,226,.25); transition: all .2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-phone {
+      display: inline-flex; align-items: center; gap: .7rem;
+      font-size: 1.05rem; color: var(--muted); transition: color .2s;
+    }
+    .hero-phone:hover { color: var(--gold); }
+    .hero-scroll {
+      position: absolute; bottom: 1.8rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      color: var(--muted); font-size: .68rem; letter-spacing: .15em; text-transform: uppercase;
+      animation: scrollBounce 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      55% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ==============================
+       ABOUT STRIP
+    ============================== */
+    #about {
+      background: var(--bg-alt); padding: 3.5rem 1.5rem;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .about-grid {
+      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem; text-align: center;
+    }
+    .about-item { padding: 1rem; }
+    .about-icon { font-size: 2rem; margin-bottom: .75rem; }
+    .about-title { font-family: var(--ff-head); font-size: 1.1rem; margin-bottom: .4rem; }
+    .about-text { font-size: .85rem; color: var(--muted); }
+
+    /* ==============================
+       MENU
+    ============================== */
+    #menu { background: var(--bg); }
+    .filter-bar { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .filter-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); padding: .38rem .95rem; border-radius: 999px;
+      font-size: .78rem; font-family: var(--ff-body); cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--gold); border-color: var(--gold);
+      color: #111; font-weight: 600;
+    }
+    .pizzas-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.1rem; margin-bottom: 3rem;
+    }
+    .pizza-card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius); padding: 1.4rem;
+      transition: all .25s; position: relative; overflow: hidden;
+    }
+    .pizza-card::after {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: var(--gold); transform: scaleY(0); transform-origin: top;
+      transition: transform .25s;
+    }
+    .pizza-card:hover { border-color: rgba(232,151,62,.35); transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.35); }
+    .pizza-card:hover::after { transform: scaleY(1); }
+    .pizza-card.special {
+      background: linear-gradient(135deg, #1a1a1a 0%, #1e180e 100%);
+      border-color: rgba(232,151,62,.3);
+    }
+    .pizza-card.plaque {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #1a1010 0%, #1e1610 100%);
+      border-color: rgba(192,57,43,.35);
+      display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;
+    }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .6rem; }
+    .pizza-name { font-family: var(--ff-head); font-size: 1.1rem; font-weight: 600; }
+    .pizza-price { font-size: .95rem; font-weight: 700; color: var(--gold); white-space: nowrap; margin-left: .75rem; }
+    .badges { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: .65rem; }
+    .badge {
+      font-size: .68rem; padding: .18rem .55rem; border-radius: 999px;
+      font-weight: 600; letter-spacing: .04em;
+    }
+    .b-veg    { background: var(--green-dim); color: #4ade80; border: 1px solid rgba(45,106,79,.4); }
+    .b-spicy  { background: var(--red-dim);   color: #f87171; border: 1px solid rgba(192,57,43,.4); }
+    .b-sig    { background: var(--gold-dim);  color: var(--gold); border: 1px solid rgba(232,151,62,.4); }
+    .b-fromage{ background: rgba(202,165,50,.18); color: #fcd34d; border: 1px solid rgba(202,165,50,.3); }
+    .ingredients { font-size: .84rem; color: var(--muted); line-height: 1.6; }
+    .ac { color: var(--gold); font-style: italic; font-size: .78rem; }
+
+    /* Boissons */
+    .boissons-box {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius); padding: 2rem;
+    }
+    .boissons-title { font-family: var(--ff-head); font-size: 1.4rem; margin-bottom: 1.25rem; }
+    .boissons-list { display: flex; flex-wrap: wrap; gap: .85rem; }
+    .bois-item {
+      display: flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+      padding: .45rem .9rem; border-radius: 7px; font-size: .84rem;
+    }
+    .bois-item strong { color: var(--gold); margin-left: .3rem; }
+    .menu-note {
+      margin-top: 1.25rem; font-size: .78rem; color: var(--muted); font-style: italic;
+    }
+
+    /* ==============================
+       PLANNING
+    ============================== */
+    #planning { background: var(--bg-alt); }
+    .planning-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 1rem;
+    }
+    .day-card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius); padding: 1.75rem 1.25rem;
+      text-align: center; transition: all .25s; position: relative; overflow: hidden;
+    }
+    .day-card:hover {
+      border-color: rgba(232,151,62,.4); transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.3);
+    }
+    .day-emoji { font-size: 2.2rem; margin-bottom: .7rem; display: block; }
+    .day-name { font-family: var(--ff-head); font-size: 1.05rem; font-weight: 600; margin-bottom: .4rem; }
+    .day-loc { font-size: .88rem; font-weight: 500; color: var(--gold); }
+    .day-off { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+    /* ==============================
+       MAP
+    ============================== */
+    #emplacements { background: var(--bg); }
+    #map {
+      width: 100%; height: 460px; border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .leaflet-popup-content-wrapper {
+      background: #1e1e1e; color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px;
+    }
+    .leaflet-popup-tip { background: #1e1e1e; }
+
+    /* ==============================
+       CONTACT
+    ============================== */
+    #contact { background: var(--bg-alt); text-align: center; }
+    .phone-block {
+      display: inline-flex; align-items: center; gap: 1.2rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem 2.5rem; margin-bottom: 3rem;
+      transition: border-color .2s;
+    }
+    .phone-block:hover { border-color: var(--gold); }
+    .phone-icon-big { font-size: 2.4rem; }
+    .phone-lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: .25rem; }
+    .phone-num {
+      font-family: var(--ff-head); font-size: 1.9rem; font-weight: 700;
+      color: var(--text); transition: color .2s;
+    }
+    .phone-num:hover { color: var(--gold); }
+    .socials { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+    .social-btn {
+      display: inline-flex; align-items: center; gap: .65rem;
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,.09);
+      padding: .85rem 1.6rem; border-radius: 8px;
+      font-size: .9rem; font-weight: 500; transition: all .2s;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .social-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .contact-note { font-size: .84rem; color: var(--muted); font-style: italic; max-width: 480px; margin: 0 auto; }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      background: #080808; border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem; text-align: center;
+      font-size: .78rem; color: var(--muted);
+    }
+    footer a { color: var(--gold); }
+
+    /* ==============================
+       AVIS GOOGLE
+    ============================== */
+    .reviews-global-header {
+      display: flex; align-items: center; gap: 2rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.6rem 2rem; margin-bottom: 2rem;
+    }
+    .reviews-score-big {
+      font-family: var(--ff-head); font-size: 3.8rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .reviews-stars-row { color: var(--gold); font-size: 1.1rem; letter-spacing: .05em; margin-bottom: .2rem; }
+    .reviews-total { font-size: .8rem; color: var(--muted); }
+    .g-logo-row { display: flex; align-items: center; gap: .4rem; margin-top: .4rem; font-size: .73rem; color: var(--muted); }
+    .review-cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .review-card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,.06);
+      border-radius: 10px; padding: 1.3rem; transition: border-color .2s, transform .2s;
+    }
+    .review-card:hover { border-color: rgba(232,151,62,.22); transform: translateY(-2px); }
+    .rc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .65rem; }
+    .rc-name { font-weight: 600; font-size: .9rem; }
+    .rc-meta { font-size: .7rem; color: var(--muted); margin-top: .12rem; }
+    .rc-stars { color: var(--gold); font-size: .86rem; white-space: nowrap; flex-shrink: 0; margin-left: .5rem; }
+    .rc-text { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+    .btn-google {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: rgba(66,133,244,.09); border: 1px solid rgba(66,133,244,.22);
+      color: #7ab5ff; padding: .7rem 1.5rem; border-radius: 8px;
+      font-size: .84rem; font-weight: 500; transition: all .2s;
+    }
+    .btn-google:hover { background: rgba(66,133,244,.17); border-color: rgba(66,133,244,.4); color: #93c5fd; }
+
+    /* ==============================
+       RESPONSIVE
+    ============================== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none; position: absolute; top: 62px; left: 0; right: 0;
+        background: rgba(15,15,15,.98); flex-direction: column;
+        padding: 1rem 1.5rem 2rem; border-bottom: 1px solid var(--border); gap: 1rem;
+      }
+      .nav-links.open { display: flex; }
+      .burger { display: flex; }
+      section { padding: 3.5rem 1.25rem; }
+      #hero { padding: 5rem 1.25rem 3.5rem; }
+      #about { padding: 2.5rem 1.25rem; }
+      .about-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .section-sub { margin-bottom: 2rem; }
+      .pizzas-grid { grid-template-columns: 1fr; }
+      .pizza-card.plaque { grid-column: 1; flex-direction: column; gap: .75rem; }
+      .planning-grid { grid-template-columns: repeat(2, 1fr); }
+      .phone-block { padding: 1.5rem 1.75rem; flex-direction: column; text-align: center; gap: .5rem; }
+      .phone-num { font-size: 1.5rem; }
+      #map { height: 320px; }
+      .boissons-box { padding: 1.5rem 1.25rem; }
+      .social-btn { padding: .75rem 1.25rem; font-size: .85rem; }
+    }
+    @media (max-width: 480px) {
+      .planning-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .about-grid { grid-template-columns: 1fr; }
+      .hero-logo-wrap { width: 160px; height: 160px; }
+      .hero-h1 { font-size: 2.4rem; }
+      .filter-bar { gap: .4rem; }
+      .filter-btn { font-size: .72rem; padding: .3rem .75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">
+      <img src="logo.png" alt="" aria-hidden="true" />
+      La Pizzanéenne
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#menu">La Carte</a></li>
+      <li><a href="#planning">Planning</a></li>
+      <li><a href="#emplacements">Nos Spots</a></li>
+      <li><a href="#avis">Avis</a></li>
+      <li><a href="#contact" class="nav-cta">Commander</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menu navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <div class="hero-logo-wrap">
+    <img src="logo.png" alt="Logo La Pizzanéenne" />
+  </div>
+
+  <p class="hero-eyebrow">Pizzeria Itinérante · Hautes-Pyrénées</p>
+  <h1 class="hero-h1">La <em>Pizzanéenne</em></h1>
+  <p class="hero-sub">Pizzas semi-complètes au levain, préparées avec passion et des produits de qualité des Pyrénées</p>
+
+  <div class="hero-btns">
+    <a href="#menu" class="btn-red">Voir la carte</a>
+    <a href="#planning" class="btn-outline">Notre planning</a>
+  </div>
+
+  <a href="tel:0780205659" class="hero-phone">
+    <span>📞</span>
+    <span>07 80 20 56 59</span>
+  </a>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Découvrir</span>
+    <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+      <path d="M7 1v12M1 7l6 7 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================================================
+     À PROPOS STRIP
+============================================================ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-item">
+      <div class="about-icon">🌾</div>
+      <div class="about-title">Pâte au Levain</div>
+      <div class="about-text">Farine semi-complète, longue fermentation pour une pâte légère et savoureuse</div>
+    </div>
+    <div class="about-item">
+      <div class="about-icon">🏔️</div>
+      <div class="about-title">Produits des Pyrénées</div>
+      <div class="about-text">Truite, fromage de brebis, jambon du pays… des saveurs authentiquement locales</div>
+    </div>
+    <div class="about-item">
+      <div class="about-icon">🏠</div>
+      <div class="about-title">Tout Fait Maison</div>
+      <div class="about-text">Dans la mesure du possible, toutes nos préparations sont réalisées maison</div>
+    </div>
+    <div class="about-item">
+      <div class="about-icon">🚐</div>
+      <div class="about-title">On se déplace</div>
+      <div class="about-text">5 villages par semaine pour que la pizza vienne à vous !</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MENU / CARTE
+============================================================ -->
+<section id="menu">
+  <div class="container">
+    <p class="label">La Carte</p>
+    <h2 class="section-title">Nos Pizzas au Levain</h2>
+    <p class="section-sub">Toutes nos pizzas sont semi-complètes au levain. Allergènes sur demande.</p>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Toutes</button>
+      <button class="filter-btn" data-filter="veg">🌿 Végétariennes</button>
+      <button class="filter-btn" data-filter="spicy">🌶️ Épicées</button>
+      <button class="filter-btn" data-filter="sig">⭐ Signatures</button>
+      <button class="filter-btn" data-filter="fromage">🧀 Fromagères</button>
+    </div>
+
+    <div class="pizzas-grid" id="pizzasGrid">
+
+      <!-- MARGHERITA -->
+      <div class="pizza-card" data-tags="veg">
+        <div class="card-head">
+          <span class="pizza-name">Margherita</span>
+          <span class="pizza-price">10 €</span>
+        </div>
+        <div class="badges"><span class="badge b-veg">🌿 Végé</span></div>
+        <p class="ingredients">Sauce tomate, mozzarella, tomates cerise, basilic frais, filet d'huile d'olive</p>
+      </div>
+
+      <!-- REGINA -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Regina</span>
+          <span class="pizza-price">12,50 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Sauce tomate, mozzarella, jambon blanc, champignons, olives</p>
+      </div>
+
+      <!-- NAPOLITAINE -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Napolitaine</span>
+          <span class="pizza-price">13 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Sauce tomate, mozzarella, anchois, câpres, tomates cerise, olives</p>
+      </div>
+
+      <!-- MARAICHERE -->
+      <div class="pizza-card" data-tags="veg">
+        <div class="card-head">
+          <span class="pizza-name">Maraîchère</span>
+          <span class="pizza-price">13 €</span>
+        </div>
+        <div class="badges"><span class="badge b-veg">🌿 Végé</span></div>
+        <p class="ingredients">Sauce tomate, mozzarella, aubergines, patates douces, champignons, olives, origan</p>
+      </div>
+
+      <!-- 4 FROMAGES -->
+      <div class="pizza-card" data-tags="veg fromage">
+        <div class="card-head">
+          <span class="pizza-name">4 Fromages</span>
+          <span class="pizza-price">13,50 €</span>
+        </div>
+        <div class="badges">
+          <span class="badge b-veg">🌿 Végé</span>
+          <span class="badge b-fromage">🧀 Fromage</span>
+        </div>
+        <p class="ingredients">Sauce tomate, mozzarella, gorgonzola, reblochon, chèvre</p>
+      </div>
+
+      <!-- CHAURETTE -->
+      <div class="pizza-card" data-tags="veg spicy">
+        <div class="card-head">
+          <span class="pizza-name">Chaurette</span>
+          <span class="pizza-price">13,50 €</span>
+        </div>
+        <div class="badges">
+          <span class="badge b-veg">🌿 Végé</span>
+          <span class="badge b-spicy">🌶️ Épicé</span>
+        </div>
+        <p class="ingredients">Sauce blanche, mozzarella, noix, chèvre, olives <span class="ac">· après cuisson&nbsp;: miel, piment d'Espelette</span></p>
+      </div>
+
+      <!-- CHORIZO -->
+      <div class="pizza-card" data-tags="spicy">
+        <div class="card-head">
+          <span class="pizza-name">Chorizo</span>
+          <span class="pizza-price">14 €</span>
+        </div>
+        <div class="badges"><span class="badge b-spicy">🌶️ Épicé</span></div>
+        <p class="ingredients">Sauce tomate, mozzarella, chorizo, poivrons, piment d'Espelette, olives, origan</p>
+      </div>
+
+      <!-- PESTO -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Pesto</span>
+          <span class="pizza-price">14 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Crème de pesto, mozzarella, tomates cerise <span class="ac">· après cuisson&nbsp;: jambon du pays, basilic frais, parmesan</span></p>
+      </div>
+
+      <!-- PARMESANNE -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Parmesan(ne)</span>
+          <span class="pizza-price">14 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Sauce tomate, mozzarella, oignons, aubergines, jambon du pays <span class="ac">· après cuisson&nbsp;: parmesan, crème de balsamique</span></p>
+      </div>
+
+      <!-- MONTAGNE -->
+      <div class="pizza-card" data-tags="veg fromage">
+        <div class="card-head">
+          <span class="pizza-name">Montagne</span>
+          <span class="pizza-price">14 €</span>
+        </div>
+        <div class="badges">
+          <span class="badge b-veg">🌿 Végé</span>
+          <span class="badge b-fromage">🧀 Fromage</span>
+        </div>
+        <p class="ingredients">Sauce blanche, mozzarella, oignons, gorgonzola, fromage de brebis des Pyrénées, champignons <span class="ac">· après cuisson&nbsp;: roquette, tomates cerise, crème fouettée myrtille, crème de balsamique</span></p>
+      </div>
+
+      <!-- TARTIFLETTE -->
+      <div class="pizza-card" data-tags="fromage">
+        <div class="card-head">
+          <span class="pizza-name">Tartiflette</span>
+          <span class="pizza-price">14,50 €</span>
+        </div>
+        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
+        <p class="ingredients">Sauce blanche, mozzarella, oignons, poitrine fumée, pommes de terre grenaille, reblochon</p>
+      </div>
+
+      <!-- RACLETTE -->
+      <div class="pizza-card" data-tags="fromage">
+        <div class="card-head">
+          <span class="pizza-name">Raclette</span>
+          <span class="pizza-price">14,50 €</span>
+        </div>
+        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
+        <p class="ingredients">Sauce blanche, mozzarella, jambon du pays, jambon blanc, pommes de terre grenaille, fromage à raclette</p>
+      </div>
+
+      <!-- RUSTIQUE -->
+      <div class="pizza-card" data-tags="fromage">
+        <div class="card-head">
+          <span class="pizza-name">Rustique</span>
+          <span class="pizza-price">14,50 €</span>
+        </div>
+        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
+        <p class="ingredients">Sauce blanche, mozzarella, noix, oignons rouges, poitrine fumée, champignons, fromage de brebis des Pyrénées</p>
+      </div>
+
+      <!-- INDIENNE -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Indienne</span>
+          <span class="pizza-price">15 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Crème curry, mozzarella, oignons, poulet, patates douces, poivrons, graines de cumin</p>
+      </div>
+
+      <!-- LA BURRATA -->
+      <div class="pizza-card" data-tags="veg sig">
+        <div class="card-head">
+          <span class="pizza-name">La Burrata</span>
+          <span class="pizza-price">15 €</span>
+        </div>
+        <div class="badges">
+          <span class="badge b-veg">🌿 Végé</span>
+          <span class="badge b-sig">⭐ Spéciale</span>
+        </div>
+        <p class="ingredients">Sauce tomate, mozzarella, aubergines, poivrons <span class="ac">· après cuisson&nbsp;: roquette, tomates cerise, crème de balsamique, tapenade, burrata</span></p>
+      </div>
+
+      <!-- LA PIZZANEENNE -->
+      <div class="pizza-card special" data-tags="sig fromage">
+        <div class="card-head">
+          <span class="pizza-name">La Pizzanéenne</span>
+          <span class="pizza-price">15 €</span>
+        </div>
+        <div class="badges">
+          <span class="badge b-sig">⭐ Signature</span>
+          <span class="badge b-fromage">🏔️ Pyrénées</span>
+        </div>
+        <p class="ingredients">Crème citronnée à l'aneth, mozzarella, fromage de brebis des Pyrénées, amandes effilées, truite des Pyrénées <span class="ac">· après cuisson&nbsp;: roquette, crème de balsamique, crème fouettée myrtille</span></p>
+      </div>
+
+      <!-- CANARD -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Canard</span>
+          <span class="pizza-price">16 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Sauce blanche, mozzarella, noix, poires, gorgonzola, champignons, persillade, magret de canard fumé</p>
+      </div>
+
+      <!-- BARBECUE -->
+      <div class="pizza-card" data-tags="">
+        <div class="card-head">
+          <span class="pizza-name">Barbecue</span>
+          <span class="pizza-price">16 €</span>
+        </div>
+        <div class="badges"></div>
+        <p class="ingredients">Sauce tomate, mozzarella, jambon, chorizo, poulet, poitrine fumée, sauce barbecue, oignons frits</p>
+      </div>
+
+      <!-- MOITIE MOITIE -->
+      <div class="pizza-card" data-tags="sig">
+        <div class="card-head">
+          <span class="pizza-name">Moitié / Moitié</span>
+          <span class="pizza-price">16 €</span>
+        </div>
+        <div class="badges"><span class="badge b-sig">⭐ Spéciale</span></div>
+        <p class="ingredients">Deux recettes au choix sur une seule pizza</p>
+      </div>
+
+      <!-- L'EPHEMERE -->
+      <div class="pizza-card special" data-tags="sig">
+        <div class="card-head">
+          <span class="pizza-name">L'Éphémère</span>
+          <span class="pizza-price">Selon saison</span>
+        </div>
+        <div class="badges"><span class="badge b-sig">⭐ Spéciale</span></div>
+        <p class="ingredients">À découvrir au gré des saisons et des envies des chefs</p>
+      </div>
+
+      <!-- PIZZA PLAQUE -->
+      <div class="pizza-card plaque" data-tags="sig">
+        <div>
+          <div class="card-head" style="margin-bottom:.5rem">
+            <span class="pizza-name">🍕 Pizza Plaque <small style="font-size:.78rem;font-weight:400;color:var(--muted)">(60 × 60 cm)</small></span>
+            <span class="pizza-price">À partir de 35 €</span>
+          </div>
+          <div class="badges"><span class="badge b-sig">⭐ Sur commande</span></div>
+        </div>
+        <p class="ingredients" style="flex:1">Selon les recettes disponibles — <strong style="color:var(--text)">à réserver 3 jours à l'avance minimum</strong></p>
+      </div>
+
+    </div><!-- /pizzas-grid -->
+
+    <p class="menu-note" style="margin-bottom:1.5rem">Supplément fromage &amp; viande : 2 € · légumes &amp; œuf bio : 1 € · Burrata : 4 € · Toutes nos préparations sont faites maison dans la mesure du possible. Liste des allergènes sur demande.</p>
+
+    <!-- BOISSONS -->
+    <div class="boissons-box">
+      <h3 class="boissons-title">🍷 Boissons</h3>
+      <div class="boissons-list">
+        <div class="bois-item">🍷 Vin rouge<strong>11 €</strong></div>
+        <div class="bois-item">🥂 Vin rosé<strong>9 €</strong></div>
+        <div class="bois-item">🍾 Lambrusco<strong>8 €</strong></div>
+        <div class="bois-item">🍺 Bière<strong>4 €</strong></div>
+        <div class="bois-item">🧃 Eushola / Eushola 0<strong>3 €</strong></div>
+        <div class="bois-item">🍑 Thé glacé pêche sans sucre<strong>3 €</strong></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     PLANNING
+============================================================ -->
+<section id="planning">
+  <div class="container">
+    <p class="label">Semaine type</p>
+    <h2 class="section-title">Notre Planning</h2>
+    <p class="section-sub">Suivez-nous sur Instagram pour les annulations, événements privés et spots exceptionnels !</p>
+
+    <div class="planning-grid">
+      <div class="day-card">
+        <span class="day-emoji">🧄</span>
+        <div class="day-name">Mardi</div>
+        <div class="day-loc">Arras en Lavedan</div>
+      </div>
+      <div class="day-card">
+        <span class="day-emoji">🥦</span>
+        <div class="day-name">Mercredi</div>
+        <div class="day-loc">Esterre</div>
+      </div>
+      <div class="day-card">
+        <span class="day-emoji">🍅</span>
+        <div class="day-name">Jeudi</div>
+        <div class="day-loc">Lugagnan</div>
+      </div>
+      <div class="day-card">
+        <span class="day-emoji">🧀</span>
+        <div class="day-name">Vendredi</div>
+        <div class="day-loc">Lau Balagnas</div>
+      </div>
+      <div class="day-card">
+        <span class="day-emoji">🍕</span>
+        <div class="day-name">Samedi</div>
+        <div class="day-loc">Beaucens</div>
+      </div>
+      <div class="day-card">
+        <span class="day-emoji">😴</span>
+        <div class="day-name">Dim. &amp; Lundi</div>
+        <div class="day-off">On se repose !</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MAP
+============================================================ -->
+<section id="emplacements">
+  <div class="container">
+    <p class="label">Où nous trouver</p>
+    <h2 class="section-title">Nos Emplacements</h2>
+    <p class="section-sub">La Pizzanéenne sillonne les Hautes-Pyrénées chaque semaine. Cliquez sur un marqueur pour plus d'infos.</p>
+    <div id="map"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     AVIS GOOGLE
+============================================================ -->
+<section id="avis" style="background:var(--bg-alt)">
+  <div class="container">
+    <p class="label">Avis Google</p>
+    <h2 class="section-title">Ce qu'ils en pensent</h2>
+    <p class="section-sub">Avis réels de nos clients sur Google Maps.</p>
+
+    <div class="reviews-global-header">
+      <div class="reviews-score-big">5,0</div>
+      <div>
+        <div class="reviews-stars-row">★★★★★</div>
+        <div class="reviews-total">28 avis Google Maps</div>
+        <div class="g-logo-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Avis Google
+        </div>
+      </div>
+    </div>
+
+    <div class="review-cards-grid">
+      <div class="review-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-name">Camille Carrère <span style="font-size:.7rem;color:var(--gold);font-weight:400">· Local Guide</span></div>
+            <div class="rc-meta">21 avis · Visité en août 2025</div>
+          </div>
+          <div class="rc-stars">★★★★★</div>
+        </div>
+        <p class="rc-text">Nous n'avons jamais mangé de pizzas aussi bonnes que celles de la pizzanéenne ! La pâte faite maison est délicieuse, pas d'effet croûte, moelleuse à souhait. Les patrons très accueillants et sympathiques.</p>
+      </div>
+
+      <div class="review-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-name">Axel Delcelier</div>
+            <div class="rc-meta">1 avis · Visité en juillet 2025</div>
+          </div>
+          <div class="rc-stars">★★★★★</div>
+        </div>
+        <p class="rc-text">Pizzas avec des produits locaux à des tarifs abordables, accueil sympa et je recommande le Eushola. Je recommande !</p>
+      </div>
+
+      <div class="review-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-name">Jean Le Bihan</div>
+            <div class="rc-meta">2 avis · Visité en septembre 2025</div>
+          </div>
+          <div class="rc-stars">★★★★★</div>
+        </div>
+        <p class="rc-text">De passage cet été dans la région, nous avons eu l'occasion de goûter les pizzas. Un large choix avec des produits régionaux de qualités. Je recommande.</p>
+      </div>
+
+      <div class="review-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-name">mouvements Libres</div>
+            <div class="rc-meta">2 avis · il y a 10 mois</div>
+          </div>
+          <div class="rc-stars">★★★★★</div>
+        </div>
+        <p class="rc-text">Nous on n'était pas adeptes de pizza... depuis qu'on a découvert le camion de La Pizzanéenne on a enfin trouvé l'endroit où commander les pizzas. La pâte est faite artisanale, ingrédients locaux, un esprit éthique et partisans du Bio, une carte gourmande et une pizza éphémère qui tuent. Vraiment c'est un plaisir de déguster ses pizzas ! Ils proposent une bière Bio vraiment très bonne aussi !! BRAVO À EUX !</p>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <a href="https://www.google.com/maps/place/La+Pizzan%C3%A9enne+-+Camion+%22PizzaTruck%22+-+Arras-en-Lavedan+-Esterre+-+Lugagnan+-+Lau-Balagnas+-+Beaucens/@42.9914756,-0.0307613,12z/data=!3m1!4b1!4m6!3m5!1s0xd57db7484da8353:0x71746e26cf5ca8f8!8m2!3d42.9914756!4d-0.0307613!16s%2Fg%2F11m5rnn81m" target="_blank" rel="noopener noreferrer" class="btn-google">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Voir les 28 avis sur Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact">
+  <div class="container">
+    <p class="label">Nous contacter</p>
+    <h2 class="section-title">On est là pour vous !</h2>
+    <p class="section-sub" style="margin: 0 auto 3rem; text-align:center;">Pour passer commande ou nous retrouver, appelez-nous directement ou suivez nos réseaux.</p>
+
+    <a href="tel:0780205659" class="phone-block" style="display:inline-flex;text-decoration:none;">
+      <span class="phone-icon-big">📞</span>
+      <div>
+        <div class="phone-lbl">Téléphone &amp; commandes</div>
+        <div class="phone-num">07 80 20 56 59</div>
+      </div>
+    </a>
+
+    <div class="socials">
+      <a href="https://www.instagram.com/lapizzaneenne/" target="_blank" rel="noopener noreferrer" class="social-btn">
+        <!-- Instagram icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        @lapizzaneenne
+      </a>
+    </div>
+
+    <p class="contact-note">Les commandes sont possibles toute la journée. Pensez à réserver en avance pour les pizzas plaque (minimum 3 jours avant).</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <p>© 2025 La Pizzanéenne · Pizzeria Itinérante des Hautes-Pyrénées ·
+    <a href="https://www.instagram.com/lapizzaneenne/" target="_blank" rel="noopener">@lapizzaneenne</a>
+  </p>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ---- HAMBURGER ----
+const burger    = document.getElementById('burger');
+const navLinks  = document.getElementById('navLinks');
+burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// ---- MENU FILTERS ----
+const filterBtns = document.querySelectorAll('.filter-btn');
+const pizzaCards = document.querySelectorAll('#pizzasGrid .pizza-card');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    pizzaCards.forEach(card => {
+      const tags = card.dataset.tags || '';
+      const show = f === 'all' || tags.split(' ').includes(f);
+      card.style.display = show ? '' : 'none';
+    });
+    // Plaque card: only show when "all" or "sig"
+    document.querySelector('.pizza-card.plaque').style.display =
+      (f === 'all' || f === 'sig') ? '' : 'none';
+  });
+});
+
+// ---- LEAFLET MAP ----
+const map = L.map('map', { center: [43.01, -0.085], zoom: 11, scrollWheelZoom: false });
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd', maxZoom: 19
+}).addTo(map);
+
+const makeIcon = () => L.divIcon({
+  html: `<div style="
+    width:36px; height:36px; border-radius:50% 50% 50% 0; transform:rotate(-45deg);
+    background:#c0392b; border:3px solid #e8973e;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);
+    display:flex; align-items:center; justify-content:center;">
+    <span style="transform:rotate(45deg);font-size:15px;line-height:30px;display:block;text-align:center">🍕</span>
+  </div>`,
+  className: '', iconSize: [36,36], iconAnchor: [18,36], popupAnchor: [0,-38]
+});
+
+const spots = [
+  { name:'Arras en Lavedan', day:'Mardi',    emoji:'🧄', lat:43.026,  lng:-0.118 },
+  { name:'Esterre',          day:'Mercredi', emoji:'🥦', lat:42.880,  lng:-0.045 },
+  { name:'Lugagnan',         day:'Jeudi',    emoji:'🍅', lat:43.059,  lng:-0.056 },
+  { name:'Lau Balagnas',     day:'Vendredi', emoji:'🧀', lat:43.002,  lng:-0.066 },
+  { name:'Beaucens',         day:'Samedi',   emoji:'🍕', lat:43.019,  lng:-0.065 },
+];
+
+spots.forEach(s => {
+  L.marker([s.lat, s.lng], { icon: makeIcon() })
+   .addTo(map)
+   .bindPopup(`
+     <div style="text-align:center;padding:6px 4px;font-family:Inter,sans-serif;">
+       <div style="font-size:1.6rem;margin-bottom:5px">${s.emoji}</div>
+       <strong style="font-size:.95rem;color:#f0ebe2">${s.name}</strong><br>
+       <span style="color:#e8973e;font-weight:600;font-size:.82rem">${s.day}</span>
+     </div>
+   `, { maxWidth: 160 });
+});
+
+// Ensure map renders when visible
+new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) map.invalidateSize();
+}, { threshold: 0.2 }).observe(document.getElementById('emplacements'));
+</script>
+
+</body>
+</html>
