@@ -422,7 +422,6 @@
       font-family: var(--ff-body);
     }
     .photo-btn:hover { background: rgba(232,151,62,.22); border-color: var(--gold); }
-
     #pizza-modal {
       display: none;
       position: fixed; inset: 0; z-index: 2000;
@@ -1047,7 +1046,7 @@ document.querySelectorAll('.pizza-card[data-img]').forEach(card => {
   const btn = document.createElement('button');
   btn.className = 'photo-btn';
   btn.type = 'button';
-  btn.textContent = '📷 Voir la photo';
+  btn.textContent = 'Voir la photo';
   card.appendChild(btn);
 
   btn.addEventListener('click', e => {
