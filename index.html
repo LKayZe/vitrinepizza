@@ -411,14 +411,17 @@
     /* ==============================
        MODAL PHOTO PIZZA
     ============================== */
-    .pizza-card[data-img] { cursor: pointer; }
-    .pizza-icon {
-      position: absolute; right: .75rem; bottom: .75rem;
-      font-size: 1.1rem; opacity: .75;
-      pointer-events: none;
-      transition: opacity .2s;
+    .pizza-card[data-img]:not(.plaque) { display: flex; flex-direction: column; }
+    .pizza-card[data-img]:not(.plaque) > p { flex: 1; }
+    .photo-btn {
+      display: inline-flex; align-items: center; gap: .35rem;
+      margin-top: .75rem; align-self: flex-start; padding: .3rem .7rem;
+      background: rgba(232,151,62,.1); border: 1px solid rgba(232,151,62,.3);
+      border-radius: 6px; color: var(--gold); font-size: .74rem; font-weight: 600;
+      cursor: pointer; transition: background .2s, border-color .2s;
+      font-family: var(--ff-body);
     }
-    .pizza-card[data-img]:hover .pizza-icon { opacity: 1; }
+    .photo-btn:hover { background: rgba(232,151,62,.22); border-color: var(--gold); }
 
     #pizza-modal {
       display: none;
@@ -457,6 +460,7 @@
       transition: border-color .2s;
     }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+
   </style>
 </head>
 <body>
@@ -558,7 +562,7 @@
       <button class="filter-btn" data-filter="fromage">🧀 Fromagères</button>
     </div>
 
-    <div class="pizzas-grid" id="pizzasGrid">
+<div class="pizzas-grid" id="pizzasGrid">
 
       <!-- MARGHERITA -->
       <div class="pizza-card" data-tags="veg" data-img="margarita.jpg" data-name="Margherita">
@@ -571,7 +575,7 @@
       </div>
 
       <!-- REGINA -->
-      <div class="pizza-card" data-tags="">
+      <div class="pizza-card" data-tags="" data-img="regina.jpg" data-name="Regina">
         <div class="card-head">
           <span class="pizza-name">Regina</span>
           <span class="pizza-price">12,50 €</span>
@@ -591,7 +595,7 @@
       </div>
 
       <!-- MARAICHERE -->
-      <div class="pizza-card" data-tags="veg">
+      <div class="pizza-card" data-tags="veg" data-img="mara%C3%AEch%C3%A8re.jpg" data-name="Maraîchère">
         <div class="card-head">
           <span class="pizza-name">Maraîchère</span>
           <span class="pizza-price">13 €</span>
@@ -601,7 +605,7 @@
       </div>
 
       <!-- 4 FROMAGES -->
-      <div class="pizza-card" data-tags="veg fromage">
+      <div class="pizza-card" data-tags="veg fromage" data-img="4fromages.jpg" data-name="4 Fromages">
         <div class="card-head">
           <span class="pizza-name">4 Fromages</span>
           <span class="pizza-price">13,50 €</span>
@@ -614,7 +618,7 @@
       </div>
 
       <!-- CHAURETTE -->
-      <div class="pizza-card" data-tags="veg spicy">
+      <div class="pizza-card" data-tags="veg spicy" data-img="ch%C3%A8vrette.jpg" data-name="Chèvrette">
         <div class="card-head">
           <span class="pizza-name">Chèvrette</span>
           <span class="pizza-price">13,50 €</span>
@@ -637,7 +641,7 @@
       </div>
 
       <!-- PESTO -->
-      <div class="pizza-card" data-tags="">
+      <div class="pizza-card" data-tags="" data-img="pesto.jpg" data-name="Pesto">
         <div class="card-head">
           <span class="pizza-name">Pesto</span>
           <span class="pizza-price">14 €</span>
@@ -710,7 +714,7 @@
       </div>
 
       <!-- LA BURRATA -->
-      <div class="pizza-card" data-tags="veg sig">
+      <div class="pizza-card" data-tags="veg sig" data-img="burrata.jpg" data-name="La Burrata">
         <div class="card-head">
           <span class="pizza-name">La Burrata</span>
           <span class="pizza-price">15 €</span>
@@ -736,7 +740,7 @@
       </div>
 
       <!-- CANARD -->
-      <div class="pizza-card" data-tags="">
+      <div class="pizza-card" data-tags="" data-img="canard.jpg" data-name="Canard">
         <div class="card-head">
           <span class="pizza-name">Canard</span>
           <span class="pizza-price">16 €</span>
@@ -776,7 +780,7 @@
       </div>
 
       <!-- PIZZA PLAQUE -->
-      <div class="pizza-card plaque" data-tags="sig">
+      <div class="pizza-card plaque" data-tags="sig" data-img="plaque.jpg" data-name="Pizza Plaque">
         <div>
           <div class="card-head" style="margin-bottom:.5rem">
             <span class="pizza-name">🍕 Pizza Plaque <small style="font-size:.78rem;font-weight:400;color:var(--muted)">(60 × 40 cm)</small></span>
@@ -1040,13 +1044,14 @@ const modalName  = document.getElementById('modal-name');
 const modalClose = document.getElementById('modal-close');
 
 document.querySelectorAll('.pizza-card[data-img]').forEach(card => {
-  const icon = document.createElement('span');
-  icon.className = 'pizza-icon';
-  icon.textContent = '📷';
-  card.style.position = 'relative';
-  card.appendChild(icon);
+  const btn = document.createElement('button');
+  btn.className = 'photo-btn';
+  btn.type = 'button';
+  btn.textContent = '📷 Voir la photo';
+  card.appendChild(btn);
 
-  card.addEventListener('click', () => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
     modalImg.src      = card.dataset.img;
     modalImg.alt      = card.dataset.name;
     modalName.textContent = card.dataset.name;
