@@ -1,0 +1,15 @@
+# Flyer généré
+flyer.html
+flyer-pizzaneenne.jpg
+qr-pizzaneenne.svg
+
+# Claude
+.claude/
+
+# Node
+node_modules/
+package.json
+package-lock.json
+
+# Fichier réservé Windows
+nul
