@@ -443,15 +443,29 @@
       from { opacity: 0; transform: scale(.93); }
       to   { opacity: 1; transform: scale(1); }
     }
-    .modal-inner img {
+    .modal-img-wrap { position: relative; }
+    .modal-img-wrap img {
       width: 100%; display: block;
       max-height: 60vh; object-fit: cover;
     }
+    .modal-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.18);
+      color: #fff; width: 42px; height: 42px; border-radius: 50%;
+      font-size: 1.6rem; cursor: pointer; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s;
+      font-family: var(--ff-body); line-height: 1;
+    }
+    .modal-nav:hover { background: rgba(232,151,62,.75); border-color: var(--gold); }
+    .modal-prev { left: .65rem; }
+    .modal-next { right: .65rem; }
     .modal-footer {
       padding: .9rem 1.2rem;
       display: flex; align-items: center; justify-content: space-between;
     }
     .modal-name { font-family: var(--ff-head); font-size: 1.15rem; color: var(--gold); }
+    .modal-counter { font-size: .75rem; color: var(--muted); }
     .modal-close {
       background: none; border: 1px solid var(--border);
       color: var(--text); border-radius: 6px;
@@ -997,9 +1011,14 @@
 <!-- MODAL PHOTO PIZZA -->
 <div id="pizza-modal" role="dialog" aria-modal="true">
   <div class="modal-inner">
-    <img id="modal-img" src="" alt="" />
+    <div class="modal-img-wrap">
+      <button class="modal-nav modal-prev" id="modal-prev" aria-label="Pizza précédente">&#8249;</button>
+      <img id="modal-img" src="" alt="" />
+      <button class="modal-nav modal-next" id="modal-next" aria-label="Pizza suivante">&#8250;</button>
+    </div>
     <div class="modal-footer">
       <span class="modal-name" id="modal-name"></span>
+      <span class="modal-counter" id="modal-counter"></span>
       <button class="modal-close" id="modal-close">Fermer ✕</button>
     </div>
   </div>
@@ -1037,35 +1056,52 @@ filterBtns.forEach(btn => {
 });
 
 // ---- MODAL PHOTO PIZZA ----
-const modal      = document.getElementById('pizza-modal');
-const modalImg   = document.getElementById('modal-img');
-const modalName  = document.getElementById('modal-name');
-const modalClose = document.getElementById('modal-close');
+const modal        = document.getElementById('pizza-modal');
+const modalImg     = document.getElementById('modal-img');
+const modalName    = document.getElementById('modal-name');
+const modalCounter = document.getElementById('modal-counter');
+const modalClose   = document.getElementById('modal-close');
+const modalPrev    = document.getElementById('modal-prev');
+const modalNext    = document.getElementById('modal-next');
 
-document.querySelectorAll('.pizza-card[data-img]').forEach(card => {
+const photoCards = [...document.querySelectorAll('.pizza-card[data-img]')];
+let currentIdx = 0;
+
+const openModal = idx => {
+  currentIdx = (idx + photoCards.length) % photoCards.length;
+  const card = photoCards[currentIdx];
+  modalImg.src             = card.dataset.img;
+  modalImg.alt             = card.dataset.name;
+  modalName.textContent    = card.dataset.name;
+  modalCounter.textContent = `${currentIdx + 1} / ${photoCards.length}`;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+photoCards.forEach((card, i) => {
   const btn = document.createElement('button');
   btn.className = 'photo-btn';
   btn.type = 'button';
   btn.textContent = 'Voir la photo';
   card.appendChild(btn);
-
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    modalImg.src      = card.dataset.img;
-    modalImg.alt      = card.dataset.name;
-    modalName.textContent = card.dataset.name;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  });
+  btn.addEventListener('click', e => { e.stopPropagation(); openModal(i); });
 });
 
 const closeModal = () => {
   modal.classList.remove('open');
   document.body.style.overflow = '';
 };
+
+modalPrev.addEventListener('click', () => openModal(currentIdx - 1));
+modalNext.addEventListener('click', () => openModal(currentIdx + 1));
 modalClose.addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'Escape')      closeModal();
+  if (e.key === 'ArrowLeft')   openModal(currentIdx - 1);
+  if (e.key === 'ArrowRight')  openModal(currentIdx + 1);
+});
 
 // ---- LEAFLET MAP ----
 const map = L.map('map', { center: [43.01, -0.085], zoom: 11, scrollWheelZoom: false });
