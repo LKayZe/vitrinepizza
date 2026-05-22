@@ -1066,14 +1066,22 @@ const modalNext    = document.getElementById('modal-next');
 
 const photoCards = [...document.querySelectorAll('.pizza-card[data-img]')];
 let currentIdx = 0;
+let loadToken  = 0;
 
 const openModal = idx => {
   currentIdx = (idx + photoCards.length) % photoCards.length;
-  const card = photoCards[currentIdx];
-  modalImg.src             = card.dataset.img;
-  modalImg.alt             = card.dataset.name;
-  modalName.textContent    = card.dataset.name;
-  modalCounter.textContent = `${currentIdx + 1} / ${photoCards.length}`;
+  const card        = photoCards[currentIdx];
+  const capturedIdx = currentIdx;
+  const token       = ++loadToken;
+
+  modalImg.onload = () => {
+    if (token !== loadToken) return; // navigation plus récente en cours
+    modalName.textContent    = card.dataset.name;
+    modalCounter.textContent = `${capturedIdx + 1} / ${photoCards.length}`;
+  };
+
+  modalImg.alt = card.dataset.name;
+  modalImg.src = card.dataset.img;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 };
