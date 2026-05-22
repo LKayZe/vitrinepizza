@@ -1112,7 +1112,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ---- LEAFLET MAP ----
-const map = L.map('map', { center: [43.01, -0.085], zoom: 11, scrollWheelZoom: false });
+const map = L.map('map', { center: [42.97, -0.062], zoom: 11, scrollWheelZoom: false });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
@@ -1131,11 +1131,11 @@ const makeIcon = () => L.divIcon({
 });
 
 const spots = [
-  { name:'Arras en Lavedan', day:'Mardi',    emoji:'🧄', lat:43.026,  lng:-0.118 },
-  { name:'Esterre',          day:'Mercredi', emoji:'🥦', lat:42.880,  lng:-0.045 },
-  { name:'Lugagnan',         day:'Jeudi',    emoji:'🍅', lat:43.059,  lng:-0.056 },
-  { name:'Lau Balagnas',     day:'Vendredi', emoji:'🧀', lat:43.002,  lng:-0.066 },
-  { name:'Beaucens',         day:'Samedi',   emoji:'🍕', lat:43.019,  lng:-0.065 },
+  { name:'Arras en Lavedan', day:'Mardi',    emoji:'🧄', lat:42.9919, lng:-0.1267 },
+  { name:'Esterre',          day:'Mercredi', emoji:'🥦', lat:42.8749, lng: 0.0061 },
+  { name:'Lugagnan',         day:'Jeudi',    emoji:'🍅', lat:43.0622, lng:-0.0384 },
+  { name:'Lau Balagnas',     day:'Vendredi', emoji:'🧀', lat:42.9965, lng:-0.0925 },
+  { name:'Beaucens',         day:'Samedi',   emoji:'🍕', lat:42.9754, lng:-0.0598 },
 ];
 
 spots.forEach(s => {
