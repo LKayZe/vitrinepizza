@@ -1,25 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem('pizzaneenneLang');
-        var lang = saved;
-        if (!lang) {
-          var nav = ((navigator.language || navigator.userLanguage || 'fr') + '').toLowerCase();
-          lang = nav.indexOf('es') === 0 ? 'es' : (nav.indexOf('en') === 0 ? 'en' : 'fr');
-          localStorage.setItem('pizzaneenneLang', lang);
-        }
-        if (lang === 'en') { window.location.replace('index-en.html'); }
-        else if (lang === 'es') { window.location.replace('index-es.html'); }
-      } catch (e) {}
-    })();
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Pizzanéenne — Pizzeria Itinérante des Hautes-Pyrénées</title>
-  <meta name="description" content="La Pizzanéenne, pizzeria itinérante dans les Hautes-Pyrénées. Pizzas semi-complètes au levain naturel, faites maison. Arras en Lavedan, Esterre, Lugagnan, Lau Balagnas, Beaucens." />
+  <title>La Pizzanéenne — Mobile Pizzeria in the Hautes-Pyrénées</title>
+  <meta name="description" content="La Pizzanéenne, a mobile pizzeria in the Hautes-Pyrénées, France. Wholegrain sourdough pizzas, homemade. Arras-en-Lavedan, Esterre, Lugagnan, Lau-Balagnas, Beaucens." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -266,7 +251,7 @@
     .ingredients { font-size: .84rem; color: var(--muted); line-height: 1.6; }
     .ac { color: var(--gold); font-style: italic; font-size: .78rem; }
 
-    /* Boissons */
+    /* Drinks */
     .boissons-box {
       background: var(--bg-card); border: 1px solid rgba(255,255,255,.06);
       border-radius: var(--radius); padding: 2rem;
@@ -358,7 +343,7 @@
     footer a { color: var(--gold); }
 
     /* ==============================
-       AVIS GOOGLE
+       GOOGLE REVIEWS
     ============================== */
     .reviews-global-header {
       display: flex; align-items: center; gap: 2rem;
@@ -430,7 +415,7 @@
     }
 
     /* ==============================
-       MODAL PHOTO PIZZA
+       PIZZA PHOTO MODAL
     ============================== */
     .pizza-card[data-img]:not(.plaque) { display: flex; flex-direction: column; }
     .pizza-card[data-img]:not(.plaque) > p { flex: 1; }
@@ -510,20 +495,20 @@
     </a>
     <div class="nav-right">
       <ul class="nav-links" id="navLinks">
-        <li><a href="#menu">La Carte</a></li>
-        <li><a href="#planning">Planning</a></li>
-        <li><a href="#emplacements">Nos Spots</a></li>
-        <li><a href="#avis">Avis</a></li>
-        <li><a href="#contact" class="nav-cta">Commander</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#planning">Schedule</a></li>
+        <li><a href="#emplacements">Our Spots</a></li>
+        <li><a href="#avis">Reviews</a></li>
+        <li><a href="#contact" class="nav-cta">Order</a></li>
       </ul>
       <div class="lang-switch">
-        <a href="index.html" data-lang="fr" class="lang-link active">FR</a>
+        <a href="index.html" data-lang="fr" class="lang-link">FR</a>
         <span class="lang-sep">·</span>
-        <a href="index-en.html" data-lang="en" class="lang-link">EN</a>
+        <a href="index-en.html" data-lang="en" class="lang-link active">EN</a>
         <span class="lang-sep">·</span>
         <a href="index-es.html" data-lang="es" class="lang-link">ES</a>
       </div>
-      <button class="burger" id="burger" aria-label="Menu navigation">
+      <button class="burger" id="burger" aria-label="Navigation menu">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -535,16 +520,16 @@
 ============================================================ -->
 <section id="hero">
   <div class="hero-logo-wrap">
-    <img src="logo.png" alt="Logo La Pizzanéenne" />
+    <img src="logo.png" alt="La Pizzanéenne logo" />
   </div>
 
-  <p class="hero-eyebrow">Pizzeria Itinérante · Hautes-Pyrénées</p>
+  <p class="hero-eyebrow">Mobile Pizzeria · Hautes-Pyrénées</p>
   <h1 class="hero-h1">La <em>Pizzanéenne</em></h1>
-  <p class="hero-sub">Pizzas semi-complètes au levain naturel, préparées avec passion et des produits de qualité des Pyrénées</p>
+  <p class="hero-sub">Semi-wholemeal sourdough pizzas, made with passion and quality produce from the Pyrenees</p>
 
   <div class="hero-btns">
-    <a href="#menu" class="btn-red">Voir la carte</a>
-    <a href="#planning" class="btn-outline">Notre planning</a>
+    <a href="#menu" class="btn-red">View the menu</a>
+    <a href="#planning" class="btn-outline">Our schedule</a>
   </div>
 
   <a href="tel:0780205659" class="hero-phone">
@@ -553,7 +538,7 @@
   </a>
 
   <div class="hero-scroll" aria-hidden="true">
-    <span>Découvrir</span>
+    <span>Discover</span>
     <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
       <path d="M7 1v12M1 7l6 7 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -561,48 +546,48 @@
 </section>
 
 <!-- ============================================================
-     À PROPOS STRIP
+     ABOUT STRIP
 ============================================================ -->
 <section id="about">
   <div class="about-grid">
     <div class="about-item">
       <div class="about-icon">🌾</div>
-      <div class="about-title">Pâte au Levain</div>
-      <div class="about-text">Farine semi-complète, longue fermentation pour une pâte légère et savoureuse</div>
+      <div class="about-title">Sourdough Base</div>
+      <div class="about-text">Semi-wholemeal flour and a long fermentation for a light, full-flavoured base</div>
     </div>
     <div class="about-item">
       <div class="about-icon">🏔️</div>
-      <div class="about-title">Produits des Pyrénées</div>
-      <div class="about-text">Truite, fromage de brebis, jambon du pays… des saveurs authentiquement locales</div>
+      <div class="about-title">Pyrenean Products</div>
+      <div class="about-text">Trout, sheep's cheese, local dry-cured ham… authentically local flavors</div>
     </div>
     <div class="about-item">
       <div class="about-icon">🏠</div>
-      <div class="about-title">Tout Fait Maison</div>
-      <div class="about-text">Dans la mesure du possible, toutes nos préparations sont réalisées maison</div>
+      <div class="about-title">All Homemade</div>
+      <div class="about-text">As much as possible, all our preparations are homemade</div>
     </div>
     <div class="about-item">
       <div class="about-icon">🚐</div>
-      <div class="about-title">On se déplace</div>
-      <div class="about-text">5 villages par semaine pour que la pizza vienne à vous !</div>
+      <div class="about-title">We Come to You</div>
+      <div class="about-text">5 villages a week, so the pizza comes to you!</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-     MENU / CARTE
+     MENU
 ============================================================ -->
 <section id="menu">
   <div class="container">
-    <p class="label">La Carte</p>
-    <h2 class="section-title">Nos Pizzas au Levain</h2>
-    <p class="section-sub">Toutes nos pizzas sont semi-complètes au levain naturel. Allergènes sur demande.</p>
+    <p class="label">Menu</p>
+    <h2 class="section-title">Our Sourdough Pizzas</h2>
+    <p class="section-sub">All our pizzas are made with a semi-wholemeal sourdough base. Allergen information available on request.</p>
 
     <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">Toutes</button>
-      <button class="filter-btn" data-filter="veg">🌿 Végétariennes</button>
-      <button class="filter-btn" data-filter="spicy">🌶️ Épicées</button>
-      <button class="filter-btn" data-filter="sig">⭐ Signatures</button>
-      <button class="filter-btn" data-filter="fromage">🧀 Fromagères</button>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="veg">🌿 Vegetarian</button>
+      <button class="filter-btn" data-filter="spicy">🌶️ Spicy</button>
+      <button class="filter-btn" data-filter="sig">⭐ Signature</button>
+      <button class="filter-btn" data-filter="fromage">🧀 Cheese</button>
     </div>
 
 <div class="pizzas-grid" id="pizzasGrid">
@@ -613,8 +598,8 @@
           <span class="pizza-name">Margherita</span>
           <span class="pizza-price">10 €</span>
         </div>
-        <div class="badges"><span class="badge b-veg">🌿 Végé</span></div>
-        <p class="ingredients">Sauce tomate, mozzarella, tomates cerise, basilic frais, filet d'huile d'olive</p>
+        <div class="badges"><span class="badge b-veg">🌿 Veggie</span></div>
+        <p class="ingredients">Tomato sauce, mozzarella, cherry tomatoes, fresh basil, drizzle of olive oil</p>
       </div>
 
       <!-- REGINA -->
@@ -624,7 +609,7 @@
           <span class="pizza-price">12,50 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Sauce tomate, mozzarella, jambon blanc, champignons, olives</p>
+        <p class="ingredients">Tomato sauce, mozzarella, cooked ham, mushrooms, olives</p>
       </div>
 
       <!-- NAPOLITAINE -->
@@ -634,7 +619,7 @@
           <span class="pizza-price">13 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Sauce tomate, mozzarella, anchois, câpres, tomates cerise, olives</p>
+        <p class="ingredients">Tomato sauce, mozzarella, anchovies, capers, cherry tomatoes, olives</p>
       </div>
 
       <!-- MARAICHERE -->
@@ -643,8 +628,8 @@
           <span class="pizza-name">Maraîchère</span>
           <span class="pizza-price">13 €</span>
         </div>
-        <div class="badges"><span class="badge b-veg">🌿 Végé</span></div>
-        <p class="ingredients">Sauce tomate, mozzarella, aubergines, patates douces, champignons, olives, origan</p>
+        <div class="badges"><span class="badge b-veg">🌿 Veggie</span></div>
+        <p class="ingredients">Tomato sauce, mozzarella, eggplant, sweet potatoes, mushrooms, olives, oregano</p>
       </div>
 
       <!-- 4 FROMAGES -->
@@ -654,10 +639,10 @@
           <span class="pizza-price">13,50 €</span>
         </div>
         <div class="badges">
-          <span class="badge b-veg">🌿 Végé</span>
-          <span class="badge b-fromage">🧀 Fromage</span>
+          <span class="badge b-veg">🌿 Veggie</span>
+          <span class="badge b-fromage">🧀 Cheese</span>
         </div>
-        <p class="ingredients">Sauce tomate, mozzarella, gorgonzola, reblochon, chèvre</p>
+        <p class="ingredients">Tomato sauce, mozzarella, gorgonzola, reblochon, goat cheese</p>
       </div>
 
       <!-- CHAURETTE -->
@@ -667,10 +652,10 @@
           <span class="pizza-price">13,50 €</span>
         </div>
         <div class="badges">
-          <span class="badge b-veg">🌿 Végé</span>
-          <span class="badge b-spicy">🌶️ Épicé</span>
+          <span class="badge b-veg">🌿 Veggie</span>
+          <span class="badge b-spicy">🌶️ Spicy</span>
         </div>
-        <p class="ingredients">Sauce blanche, mozzarella, noix, chèvre, olives <span class="ac">· après cuisson&nbsp;: miel, piment d'Espelette</span></p>
+        <p class="ingredients">White sauce, mozzarella, walnuts, goat cheese, olives <span class="ac">· after baking&nbsp;: honey, Espelette pepper</span></p>
       </div>
 
       <!-- CHORIZO -->
@@ -679,8 +664,8 @@
           <span class="pizza-name">Chorizo</span>
           <span class="pizza-price">14 €</span>
         </div>
-        <div class="badges"><span class="badge b-spicy">🌶️ Épicé</span></div>
-        <p class="ingredients">Sauce tomate, mozzarella, chorizo, poivrons, piment d'Espelette, olives, origan</p>
+        <div class="badges"><span class="badge b-spicy">🌶️ Spicy</span></div>
+        <p class="ingredients">Tomato sauce, mozzarella, chorizo, bell peppers, Espelette pepper, olives, oregano</p>
       </div>
 
       <!-- PESTO -->
@@ -690,7 +675,7 @@
           <span class="pizza-price">14 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Crème de pesto, mozzarella, tomates cerise <span class="ac">· après cuisson&nbsp;: jambon du pays, basilic frais, parmesan</span></p>
+        <p class="ingredients">Pesto cream, mozzarella, cherry tomatoes <span class="ac">· after baking&nbsp;: local dry-cured ham, fresh basil, parmesan</span></p>
       </div>
 
       <!-- PARMESANNE -->
@@ -700,7 +685,7 @@
           <span class="pizza-price">14 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Sauce tomate, mozzarella, oignons, aubergines, jambon du pays <span class="ac">· après cuisson&nbsp;: parmesan, crème de balsamique</span></p>
+        <p class="ingredients">Tomato sauce, mozzarella, onions, eggplant, local dry-cured ham <span class="ac">· after baking&nbsp;: parmesan, balsamic cream</span></p>
       </div>
 
       <!-- MONTAGNE -->
@@ -710,10 +695,10 @@
           <span class="pizza-price">14 €</span>
         </div>
         <div class="badges">
-          <span class="badge b-veg">🌿 Végé</span>
-          <span class="badge b-fromage">🧀 Fromage</span>
+          <span class="badge b-veg">🌿 Veggie</span>
+          <span class="badge b-fromage">🧀 Cheese</span>
         </div>
-        <p class="ingredients">Sauce blanche, mozzarella, oignons, gorgonzola, fromage de brebis des Pyrénées, champignons <span class="ac">· après cuisson&nbsp;: roquette, tomates cerise, crème fouettée myrtille, crème de balsamique</span></p>
+        <p class="ingredients">White sauce, mozzarella, onions, gorgonzola, Pyrenean sheep's cheese, mushrooms <span class="ac">· after baking&nbsp;: arugula, cherry tomatoes, whipped blueberry cream, balsamic cream</span></p>
       </div>
 
       <!-- TARTIFLETTE -->
@@ -722,8 +707,8 @@
           <span class="pizza-name">Tartiflette</span>
           <span class="pizza-price">14,50 €</span>
         </div>
-        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
-        <p class="ingredients">Sauce blanche, mozzarella, oignons, poitrine fumée, pommes de terre grenaille, reblochon</p>
+        <div class="badges"><span class="badge b-fromage">🧀 Cheese</span></div>
+        <p class="ingredients">White sauce, mozzarella, onions, smoked bacon, baby potatoes, reblochon</p>
       </div>
 
       <!-- RACLETTE -->
@@ -732,8 +717,8 @@
           <span class="pizza-name">Raclette</span>
           <span class="pizza-price">14,50 €</span>
         </div>
-        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
-        <p class="ingredients">Sauce blanche, mozzarella, jambon du pays, jambon blanc, pommes de terre grenaille, fromage à raclette</p>
+        <div class="badges"><span class="badge b-fromage">🧀 Cheese</span></div>
+        <p class="ingredients">White sauce, mozzarella, local dry-cured ham, cooked ham, baby potatoes, raclette cheese</p>
       </div>
 
       <!-- RUSTIQUE -->
@@ -742,8 +727,8 @@
           <span class="pizza-name">Rustique</span>
           <span class="pizza-price">14,50 €</span>
         </div>
-        <div class="badges"><span class="badge b-fromage">🧀 Fromage</span></div>
-        <p class="ingredients">Sauce blanche, mozzarella, noix, oignons rouges, poitrine fumée, champignons, fromage de brebis des Pyrénées</p>
+        <div class="badges"><span class="badge b-fromage">🧀 Cheese</span></div>
+        <p class="ingredients">White sauce, mozzarella, walnuts, red onions, smoked bacon, mushrooms, Pyrenean sheep's cheese</p>
       </div>
 
       <!-- INDIENNE -->
@@ -753,7 +738,7 @@
           <span class="pizza-price">15 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Crème curry, mozzarella, oignons, poulet, patates douces, poivrons, graines de cumin</p>
+        <p class="ingredients">Curry cream, mozzarella, onions, chicken, sweet potatoes, bell peppers, cumin seeds</p>
       </div>
 
       <!-- LA BURRATA -->
@@ -763,10 +748,10 @@
           <span class="pizza-price">15 €</span>
         </div>
         <div class="badges">
-          <span class="badge b-veg">🌿 Végé</span>
-          <span class="badge b-sig">⭐ Spéciale</span>
+          <span class="badge b-veg">🌿 Veggie</span>
+          <span class="badge b-sig">⭐ Special</span>
         </div>
-        <p class="ingredients">Sauce tomate, mozzarella, aubergines, poivrons <span class="ac">· après cuisson&nbsp;: roquette, tomates cerise, crème de balsamique, tapenade, burrata</span></p>
+        <p class="ingredients">Tomato sauce, mozzarella, eggplant, bell peppers <span class="ac">· after baking&nbsp;: arugula, cherry tomatoes, balsamic cream, tapenade, burrata</span></p>
       </div>
 
       <!-- LA PIZZANEENNE -->
@@ -777,9 +762,9 @@
         </div>
         <div class="badges">
           <span class="badge b-sig">⭐ Signature</span>
-          <span class="badge b-fromage">🏔️ Pyrénées</span>
+          <span class="badge b-fromage">🏔️ Pyrenees</span>
         </div>
-        <p class="ingredients">Crème citronnée à l'aneth, mozzarella, fromage de brebis des Pyrénées, amandes effilées, truite des Pyrénées <span class="ac">· après cuisson&nbsp;: roquette, crème de balsamique, crème fouettée myrtille</span></p>
+        <p class="ingredients">Lemon-dill cream, mozzarella, Pyrenean sheep's cheese, flaked almonds, Pyrenean trout <span class="ac">· after baking&nbsp;: arugula, balsamic cream, whipped blueberry cream</span></p>
       </div>
 
       <!-- CANARD -->
@@ -789,7 +774,7 @@
           <span class="pizza-price">16 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Sauce blanche, mozzarella, noix, poires, gorgonzola, champignons, persillade, magret de canard fumé</p>
+        <p class="ingredients">White sauce, mozzarella, walnuts, pears, gorgonzola, mushrooms, parsley-garlic, smoked duck breast</p>
       </div>
 
       <!-- BARBECUE -->
@@ -799,55 +784,55 @@
           <span class="pizza-price">16 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Sauce tomate, mozzarella, jambon, chorizo, poulet, poitrine fumée, sauce barbecue, oignons frits</p>
+        <p class="ingredients">Tomato sauce, mozzarella, ham, chorizo, chicken, smoked bacon, barbecue sauce, crispy fried onions</p>
       </div>
 
       <!-- MOITIE MOITIE -->
       <div class="pizza-card" data-tags="sig">
         <div class="card-head">
-          <span class="pizza-name">Moitié / Moitié</span>
+          <span class="pizza-name">Half / Half</span>
           <span class="pizza-price">16 €</span>
         </div>
-        <div class="badges"><span class="badge b-sig">⭐ Spéciale</span></div>
-        <p class="ingredients">Deux recettes au choix sur une seule pizza</p>
+        <div class="badges"><span class="badge b-sig">⭐ Special</span></div>
+        <p class="ingredients">Two recipes of your choice on a single pizza</p>
       </div>
 
       <!-- L'EPHEMERE -->
       <div class="pizza-card special" data-tags="sig">
         <div class="card-head">
-          <span class="pizza-name">L'Éphémère</span>
-          <span class="pizza-price">Selon saison</span>
+          <span class="pizza-name">The Ephemeral</span>
+          <span class="pizza-price">Seasonal</span>
         </div>
-        <div class="badges"><span class="badge b-sig">⭐ Spéciale</span></div>
-        <p class="ingredients">À découvrir au gré des saisons et des envies des chefs</p>
+        <div class="badges"><span class="badge b-sig">⭐ Special</span></div>
+        <p class="ingredients">To discover, following the seasons and the chefs' inspiration</p>
       </div>
 
       <!-- PIZZA PLAQUE -->
       <div class="pizza-card plaque" data-tags="sig" data-img="plaque.jpg" data-name="Pizza Plaque">
         <div>
           <div class="card-head" style="margin-bottom:.5rem">
-            <span class="pizza-name">🍕 Pizza Plaque <small style="font-size:.78rem;font-weight:400;color:var(--muted)">(60 × 40 cm)</small></span>
-            <span class="pizza-price">À partir de 35 €</span>
+            <span class="pizza-name">🍕 Sheet Pizza <small style="font-size:.78rem;font-weight:400;color:var(--muted)">(60 × 40 cm)</small></span>
+            <span class="pizza-price">From 35 €</span>
           </div>
-          <div class="badges"><span class="badge b-sig">⭐ Sur commande</span></div>
+          <div class="badges"><span class="badge b-sig">⭐ Pre-order</span></div>
         </div>
-        <p class="ingredients" style="flex:1">Selon les recettes disponibles — <strong style="color:var(--text)">à réserver 3 jours à l'avance minimum</strong></p>
+        <p class="ingredients" style="flex:1">Based on available recipes — <strong style="color:var(--text)">must be ordered at least 3 days in advance</strong></p>
       </div>
 
     </div><!-- /pizzas-grid -->
 
-    <p class="menu-note" style="margin-bottom:1.5rem">Supplément fromage &amp; viande : 2 € · légumes &amp; œuf bio : 1 € · Burrata : 4 € · Toutes nos préparations sont faites maison dans la mesure du possible. Liste des allergènes sur demande.</p>
+    <p class="menu-note" style="margin-bottom:1.5rem">Extra cheese &amp; meat: 2 € · vegetables &amp; organic egg: 1 € · Burrata: 4 € · All our preparations are homemade as much as possible. Allergen list available on request.</p>
 
-    <!-- BOISSONS -->
+    <!-- DRINKS -->
     <div class="boissons-box">
-      <h3 class="boissons-title">🍷 Boissons</h3>
+      <h3 class="boissons-title">🍷 Drinks</h3>
       <div class="boissons-list">
-        <div class="bois-item">🍷 Vin rouge<strong>11 €</strong></div>
-        <div class="bois-item">🥂 Vin rosé<strong>9 €</strong></div>
+        <div class="bois-item">🍷 Red wine<strong>11 €</strong></div>
+        <div class="bois-item">🥂 Rosé wine<strong>9 €</strong></div>
         <div class="bois-item">🍾 Lambrusco<strong>8 €</strong></div>
-        <div class="bois-item">🍺 Bière<strong>4 €</strong></div>
+        <div class="bois-item">🍺 Beer<strong>4 €</strong></div>
         <div class="bois-item">🧃 Euskola / Euskola 0<strong>3 €</strong></div>
-        <div class="bois-item">🍑 Thé glacé pêche sans sucre<strong>3 €</strong></div>
+        <div class="bois-item">🍑 Sugar-free peach iced tea<strong>3 €</strong></div>
       </div>
     </div>
 
@@ -855,44 +840,44 @@
 </section>
 
 <!-- ============================================================
-     PLANNING
+     SCHEDULE
 ============================================================ -->
 <section id="planning">
   <div class="container">
-    <p class="label">Semaine type</p>
-    <h2 class="section-title">Notre Planning</h2>
-    <p class="section-sub">Suivez-nous sur Instagram pour les annulations, événements privés et spots exceptionnels !</p>
+    <p class="label">Typical week</p>
+    <h2 class="section-title">Our Schedule</h2>
+    <p class="section-sub">Follow us on Instagram for cancellations, private events, and special spots!</p>
 
     <div class="planning-grid">
       <div class="day-card">
         <span class="day-emoji">🧄</span>
-        <div class="day-name">Mardi</div>
+        <div class="day-name">Tuesday</div>
         <div class="day-loc">Arras en Lavedan</div>
       </div>
       <div class="day-card">
         <span class="day-emoji">🥦</span>
-        <div class="day-name">Mercredi</div>
+        <div class="day-name">Wednesday</div>
         <div class="day-loc">Esterre</div>
       </div>
       <div class="day-card">
         <span class="day-emoji">🍅</span>
-        <div class="day-name">Jeudi</div>
+        <div class="day-name">Thursday</div>
         <div class="day-loc">Lugagnan</div>
       </div>
       <div class="day-card">
         <span class="day-emoji">🧀</span>
-        <div class="day-name">Vendredi</div>
+        <div class="day-name">Friday</div>
         <div class="day-loc">Lau Balagnas</div>
       </div>
       <div class="day-card">
         <span class="day-emoji">🍕</span>
-        <div class="day-name">Samedi</div>
+        <div class="day-name">Saturday</div>
         <div class="day-loc">Beaucens</div>
       </div>
       <div class="day-card">
         <span class="day-emoji">😴</span>
-        <div class="day-name">Dim. &amp; Lundi</div>
-        <div class="day-off">On se repose !</div>
+        <div class="day-name">Sun. &amp; Mon.</div>
+        <div class="day-off">We rest!</div>
       </div>
     </div>
   </div>
@@ -903,27 +888,27 @@
 ============================================================ -->
 <section id="emplacements">
   <div class="container">
-    <p class="label">Où nous trouver</p>
-    <h2 class="section-title">Nos Emplacements</h2>
-    <p class="section-sub">La Pizzanéenne sillonne les Hautes-Pyrénées chaque semaine. Cliquez sur un marqueur pour plus d'infos.</p>
+    <p class="label">Where to find us</p>
+    <h2 class="section-title">Our Locations</h2>
+    <p class="section-sub">La Pizzanéenne travels through the Hautes-Pyrénées every week. Click a marker for more info.</p>
     <div id="map"></div>
   </div>
 </section>
 
 <!-- ============================================================
-     AVIS GOOGLE
+     GOOGLE REVIEWS
 ============================================================ -->
 <section id="avis" style="background:var(--bg-alt)">
   <div class="container">
-    <p class="label">Avis Google</p>
-    <h2 class="section-title">Ce qu'ils en pensent</h2>
-    <p class="section-sub">Avis réels de nos clients sur Google Maps.</p>
+    <p class="label">Google Reviews</p>
+    <h2 class="section-title">What people are saying</h2>
+    <p class="section-sub">Real reviews from our customers on Google Maps.</p>
 
     <div class="reviews-global-header">
       <div class="reviews-score-big">5,0</div>
       <div>
         <div class="reviews-stars-row">★★★★★</div>
-        <div class="reviews-total">41 avis Google Maps</div>
+        <div class="reviews-total">41 Google Maps reviews</div>
         <div class="g-logo-row">
           <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -931,7 +916,7 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          Avis Google
+          Google Reviews
         </div>
       </div>
     </div>
@@ -941,44 +926,44 @@
         <div class="rc-top">
           <div>
             <div class="rc-name">Val Pek <span style="font-size:.7rem;color:var(--gold);font-weight:400">· Local Guide</span></div>
-            <div class="rc-meta">26 avis · il y a 2 semaines</div>
+            <div class="rc-meta">26 reviews · 2 weeks ago</div>
           </div>
           <div class="rc-stars">★★★★★</div>
         </div>
-        <p class="rc-text">Nous étions de passage, on vous dirait sincèrement à bientôt tellement on s'est régalé ! Alors, on vous souhaite tout simplement une bonne continuation !</p>
+        <p class="rc-text">We were just passing through, and we'd honestly love to come back — we enjoyed it so much! Wishing you all the best going forward!</p>
       </div>
 
       <div class="review-card">
         <div class="rc-top">
           <div>
             <div class="rc-name">Sarah Galan</div>
-            <div class="rc-meta">il y a 10 heures</div>
+            <div class="rc-meta">10 hours ago</div>
           </div>
           <div class="rc-stars">★★★★★</div>
         </div>
-        <p class="rc-text">Les pizzas sont excellentes, et les cuistots sont au top! Pizza de qualité avec des produits de qualité, c'est une perle rare! Je recommande à 100%</p>
+        <p class="rc-text">The pizzas are excellent, and the cooks are amazing! Quality pizza with quality ingredients, it's a rare gem! I recommend 100%</p>
       </div>
 
       <div class="review-card">
         <div class="rc-top">
           <div>
             <div class="rc-name">christophe cluchier</div>
-            <div class="rc-meta">1 avis · il y a 2 heures</div>
+            <div class="rc-meta">1 review · 2 hours ago</div>
           </div>
           <div class="rc-stars">★★★★★</div>
         </div>
-        <p class="rc-text">Une pâte au levain avec des ingrédients de qualité. Je recommande vivement. Pour moi la top pizza de la vallée</p>
+        <p class="rc-text">A sourdough base with quality ingredients. I highly recommend it. For me, the best pizza in the valley</p>
       </div>
 
       <div class="review-card">
         <div class="rc-top">
           <div>
             <div class="rc-name">Rémi Obringer</div>
-            <div class="rc-meta">1 avis · il y a 33 minutes</div>
+            <div class="rc-meta">1 review · 33 minutes ago</div>
           </div>
           <div class="rc-stars">★★★★★</div>
         </div>
-        <p class="rc-text">Très bonnes pizzas au levain avec des ingrédients de qualité et locaux. Même si le gérant est très grand et porte une casquette à l'envers, il ne faut pas se fier aux apparences, il est très sympathique.</p>
+        <p class="rc-text">Very good sourdough pizzas with quality, local ingredients. Even though the owner is very tall and wears his cap backwards, don't judge by appearances — he's very friendly.</p>
       </div>
     </div>
 
@@ -990,7 +975,7 @@
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
-        Voir les 41 avis sur Google Maps
+        See all 41 reviews on Google Maps
       </a>
     </div>
   </div>
@@ -1001,14 +986,14 @@
 ============================================================ -->
 <section id="contact">
   <div class="container">
-    <p class="label">Nous contacter</p>
-    <h2 class="section-title">On est là pour vous !</h2>
-    <p class="section-sub" style="margin: 0 auto 3rem; text-align:center;">Pour passer commande ou nous retrouver, appelez-nous directement ou suivez nos réseaux.</p>
+    <p class="label">Contact us</p>
+    <h2 class="section-title">We're here for you!</h2>
+    <p class="section-sub" style="margin: 0 auto 3rem; text-align:center;">To place an order or find us, call us directly or follow us on social media.</p>
 
     <a href="tel:0780205659" class="phone-block" style="display:inline-flex;text-decoration:none;">
       <span class="phone-icon-big">📞</span>
       <div>
-        <div class="phone-lbl">Téléphone &amp; commandes</div>
+        <div class="phone-lbl">Phone &amp; orders</div>
         <div class="phone-num">07 80 20 56 59</div>
       </div>
     </a>
@@ -1025,7 +1010,7 @@
       </a>
     </div>
 
-    <p class="contact-note">Les commandes sont possibles toute la journée. Pensez à réserver en avance pour les pizzas plaque (minimum 3 jours avant).</p>
+    <p class="contact-note">Orders can be placed all day. Please book in advance for sheet pizzas (minimum 3 days ahead).</p>
   </div>
 </section>
 
@@ -1033,23 +1018,23 @@
      FOOTER
 ============================================================ -->
 <footer>
-  <p>© 2025 La Pizzanéenne · Pizzeria Itinérante des Hautes-Pyrénées ·
+  <p>© 2025 La Pizzanéenne · Mobile Pizzeria in the Hautes-Pyrénées ·
     <a href="https://www.instagram.com/lapizzaneenne/" target="_blank" rel="noopener">@lapizzaneenne</a>
   </p>
 </footer>
 
-<!-- MODAL PHOTO PIZZA -->
+<!-- PIZZA PHOTO MODAL -->
 <div id="pizza-modal" role="dialog" aria-modal="true">
   <div class="modal-inner">
     <div class="modal-img-wrap">
-      <button class="modal-nav modal-prev" id="modal-prev" aria-label="Pizza précédente">&#8249;</button>
+      <button class="modal-nav modal-prev" id="modal-prev" aria-label="Previous pizza">&#8249;</button>
       <img id="modal-img" src="" alt="" />
-      <button class="modal-nav modal-next" id="modal-next" aria-label="Pizza suivante">&#8250;</button>
+      <button class="modal-nav modal-next" id="modal-next" aria-label="Next pizza">&#8250;</button>
     </div>
     <div class="modal-footer">
       <span class="modal-name" id="modal-name"></span>
       <span class="modal-counter" id="modal-counter"></span>
-      <button class="modal-close" id="modal-close">Fermer ✕</button>
+      <button class="modal-close" id="modal-close">Close ✕</button>
     </div>
   </div>
 </div>
@@ -1092,7 +1077,7 @@ filterBtns.forEach(btn => {
   });
 });
 
-// ---- MODAL PHOTO PIZZA ----
+// ---- PIZZA PHOTO MODAL ----
 const modal        = document.getElementById('pizza-modal');
 const modalImg     = document.getElementById('modal-img');
 const modalName    = document.getElementById('modal-name');
@@ -1112,7 +1097,7 @@ const openModal = idx => {
   const token       = ++loadToken;
 
   modalImg.onload = () => {
-    if (token !== loadToken) return; // navigation plus récente en cours
+    if (token !== loadToken) return; // a more recent navigation is in progress
     modalName.textContent    = card.dataset.name;
     modalCounter.textContent = `${capturedIdx + 1} / ${photoCards.length}`;
   };
@@ -1127,7 +1112,7 @@ photoCards.forEach((card, i) => {
   const btn = document.createElement('button');
   btn.className = 'photo-btn';
   btn.type = 'button';
-  btn.textContent = 'Voir la photo';
+  btn.textContent = 'View photo';
   card.appendChild(btn);
   btn.addEventListener('click', e => { e.stopPropagation(); openModal(i); });
 });
@@ -1168,11 +1153,11 @@ const makeIcon = () => L.divIcon({
 });
 
 const spots = [
-  { name:'Arras en Lavedan', day:'Mardi',    emoji:'🧄', lat:42.9919, lng:-0.1267 },
-  { name:'Esterre',          day:'Mercredi', emoji:'🥦', lat:42.8749, lng: 0.0061 },
-  { name:'Lugagnan',         day:'Jeudi',    emoji:'🍅', lat:43.0622, lng:-0.0384 },
-  { name:'Lau Balagnas',     day:'Vendredi', emoji:'🧀', lat:42.9965, lng:-0.0925 },
-  { name:'Beaucens',         day:'Samedi',   emoji:'🍕', lat:42.9754, lng:-0.0598 },
+  { name:'Arras en Lavedan', day:'Tuesday',   emoji:'🧄', lat:42.9919, lng:-0.1267 },
+  { name:'Esterre',          day:'Wednesday', emoji:'🥦', lat:42.8749, lng: 0.0061 },
+  { name:'Lugagnan',         day:'Thursday',  emoji:'🍅', lat:43.0622, lng:-0.0384 },
+  { name:'Lau Balagnas',     day:'Friday',    emoji:'🧀', lat:42.9965, lng:-0.0925 },
+  { name:'Beaucens',         day:'Saturday',  emoji:'🍕', lat:42.9754, lng:-0.0598 },
 ];
 
 spots.forEach(s => {
