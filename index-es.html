@@ -230,12 +230,6 @@
       background: linear-gradient(135deg, #1a1a1a 0%, #1e180e 100%);
       border-color: rgba(232,151,62,.3);
     }
-    .pizza-card.plaque {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, #1a1010 0%, #1e1610 100%);
-      border-color: rgba(192,57,43,.35);
-      display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;
-    }
     .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .6rem; }
     .pizza-name { font-family: var(--ff-head); font-size: 1.1rem; font-weight: 600; }
     .pizza-price { font-size: .95rem; font-weight: 700; color: var(--gold); white-space: nowrap; margin-left: .75rem; }
@@ -396,7 +390,6 @@
       .about-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
       .section-sub { margin-bottom: 2rem; }
       .pizzas-grid { grid-template-columns: 1fr; }
-      .pizza-card.plaque { grid-column: 1; flex-direction: column; gap: .75rem; }
       .planning-grid { grid-template-columns: repeat(2, 1fr); }
       .phone-block { padding: 1.5rem 1.75rem; flex-direction: column; text-align: center; gap: .5rem; }
       .phone-num { font-size: 1.5rem; }
@@ -417,8 +410,8 @@
     /* ==============================
        MODAL FOTO PIZZA
     ============================== */
-    .pizza-card[data-img]:not(.plaque) { display: flex; flex-direction: column; }
-    .pizza-card[data-img]:not(.plaque) > p { flex: 1; }
+    .pizza-card[data-img] { display: flex; flex-direction: column; }
+    .pizza-card[data-img] > p { flex: 1; }
     .photo-btn {
       display: inline-flex; align-items: center; gap: .35rem;
       margin-top: .75rem; align-self: flex-start; padding: .3rem .7rem;
@@ -630,7 +623,7 @@
           <span class="pizza-price">13 €</span>
         </div>
         <div class="badges"><span class="badge b-veg">🌿 Vegetariana</span></div>
-        <p class="ingredients">Salsa de tomate, mozzarella, berenjenas, boniato, champiñones, aceitunas, orégano</p>
+        <p class="ingredients">Salsa de tomate, mozzarella, cebolla, espinacas, champiñones, pimientos, aceitunas, chorrito de aceite de oliva, orégano</p>
       </div>
 
       <!-- 4 FROMAGES -->
@@ -669,24 +662,14 @@
         <p class="ingredients">Salsa de tomate, mozzarella, chorizo, pimientos, pimiento de Espelette, aceitunas, orégano</p>
       </div>
 
-      <!-- PESTO -->
-      <div class="pizza-card" data-tags="" data-img="pesto.jpg" data-name="Pesto">
+      <!-- PAYSANNE -->
+      <div class="pizza-card" data-tags="">
         <div class="card-head">
-          <span class="pizza-name">Pesto</span>
+          <span class="pizza-name">Paysanne</span>
           <span class="pizza-price">14 €</span>
         </div>
         <div class="badges"></div>
-        <p class="ingredients">Crema de pesto, mozzarella, tomates cherry <span class="ac">· después del horneado&nbsp;: jamón del país, albahaca fresca, parmesano</span></p>
-      </div>
-
-      <!-- PARMESANNE -->
-      <div class="pizza-card" data-tags="" data-img="parmesane.jpeg" data-name="Parmesane">
-        <div class="card-head">
-          <span class="pizza-name">Parmesane</span>
-          <span class="pizza-price">14 €</span>
-        </div>
-        <div class="badges"></div>
-        <p class="ingredients">Salsa de tomate, mozzarella, cebolla, berenjenas, jamón del país <span class="ac">· después del horneado&nbsp;: parmesano, crema de balsámico</span></p>
+        <p class="ingredients">Salsa de tomate, mozzarella, jamón del país, cebolla roja, tomates cherry, queso de vaca de granja, pesto</p>
       </div>
 
       <!-- MONTAGNE -->
@@ -699,27 +682,7 @@
           <span class="badge b-veg">🌿 Vegetariana</span>
           <span class="badge b-fromage">🧀 Queso</span>
         </div>
-        <p class="ingredients">Salsa blanca, mozzarella, cebolla, gorgonzola, queso de oveja de los Pirineos, champiñones <span class="ac">· después del horneado&nbsp;: rúcula, tomates cherry, crema batida de arándanos, crema de balsámico</span></p>
-      </div>
-
-      <!-- TARTIFLETTE -->
-      <div class="pizza-card" data-tags="fromage" data-img="tartiflette.jpg" data-name="Tartiflette">
-        <div class="card-head">
-          <span class="pizza-name">Tartiflette</span>
-          <span class="pizza-price">14,50 €</span>
-        </div>
-        <div class="badges"><span class="badge b-fromage">🧀 Queso</span></div>
-        <p class="ingredients">Salsa blanca, mozzarella, cebolla, panceta ahumada, patatas baby, reblochon</p>
-      </div>
-
-      <!-- RACLETTE -->
-      <div class="pizza-card" data-tags="fromage" data-img="raclette.jpg" data-name="Raclette">
-        <div class="card-head">
-          <span class="pizza-name">Raclette</span>
-          <span class="pizza-price">14,50 €</span>
-        </div>
-        <div class="badges"><span class="badge b-fromage">🧀 Queso</span></div>
-        <p class="ingredients">Salsa blanca, mozzarella, jamón del país, jamón cocido, patatas baby, queso raclette</p>
+        <p class="ingredients">Salsa blanca, mozzarella, cebolla roja, gorgonzola, queso de oveja de granja, champiñones <span class="ac">· después del horneado&nbsp;: rúcula, tomates cherry, crema batida de arándanos, crema de balsámico</span></p>
       </div>
 
       <!-- RUSTIQUE -->
@@ -729,73 +692,43 @@
           <span class="pizza-price">14,50 €</span>
         </div>
         <div class="badges"><span class="badge b-fromage">🧀 Queso</span></div>
-        <p class="ingredients">Salsa blanca, mozzarella, nueces, cebolla roja, panceta ahumada, champiñones, queso de oveja de los Pirineos</p>
+        <p class="ingredients">Salsa blanca, mozzarella, nueces, cebolla roja, panceta ahumada, champiñones, queso de oveja de granja</p>
       </div>
 
-      <!-- INDIENNE -->
-      <div class="pizza-card" data-tags="" data-img="indienne.jpeg" data-name="Indienne">
+      <!-- REBLOCH' -->
+      <div class="pizza-card" data-tags="fromage">
         <div class="card-head">
-          <span class="pizza-name">Indienne</span>
-          <span class="pizza-price">15 €</span>
+          <span class="pizza-name">Rebloch'</span>
+          <span class="pizza-price">14,50 €</span>
         </div>
-        <div class="badges"></div>
-        <p class="ingredients">Crema de curry, mozzarella, cebolla, pollo, boniato, pimientos, semillas de comino</p>
+        <div class="badges"><span class="badge b-fromage">🧀 Queso</span></div>
+        <p class="ingredients">Salsa blanca, mozzarella, cebolla confitada, jamón cocido, jamón del país, reblochon</p>
       </div>
 
-      <!-- LA BURRATA -->
-      <div class="pizza-card" data-tags="veg sig" data-img="burrata.jpg" data-name="La Burrata">
+      <!-- BALUTINE -->
+      <div class="pizza-card special" data-tags="sig">
         <div class="card-head">
-          <span class="pizza-name">La Burrata</span>
-          <span class="pizza-price">15 €</span>
-        </div>
-        <div class="badges">
-          <span class="badge b-veg">🌿 Vegetariana</span>
-          <span class="badge b-sig">⭐ Especial</span>
-        </div>
-        <p class="ingredients">Salsa de tomate, mozzarella, berenjenas, pimientos <span class="ac">· después del horneado&nbsp;: rúcula, tomates cherry, crema de balsámico, tapenade, burrata</span></p>
-      </div>
-
-      <!-- LA PIZZANEENNE -->
-      <div class="pizza-card special" data-tags="sig fromage" data-img="pizzaneenne.jpeg" data-name="La Pizzanéenne">
-        <div class="card-head">
-          <span class="pizza-name">La Pizzanéenne</span>
+          <span class="pizza-name">Balutine</span>
           <span class="pizza-price">15 €</span>
         </div>
         <div class="badges">
           <span class="badge b-sig">⭐ Especialidad</span>
           <span class="badge b-fromage">🏔️ Pirineos</span>
         </div>
-        <p class="ingredients">Crema de limón y eneldo, mozzarella, queso de oveja de los Pirineos, almendras fileteadas, trucha de los Pirineos <span class="ac">· después del horneado&nbsp;: rúcula, crema de balsámico, crema batida de arándanos</span></p>
+        <p class="ingredients">Salsa blanca, mozzarella, espinacas, trucha de Lau-Balagnas al eneldo, limón confitado, queso de vaca de granja, trocitos de avellana</p>
       </div>
 
-      <!-- CANARD -->
-      <div class="pizza-card" data-tags="" data-img="canard.jpg" data-name="Canard">
+      <!-- BURRATA PISTACHE -->
+      <div class="pizza-card" data-tags="veg sig">
         <div class="card-head">
-          <span class="pizza-name">Canard</span>
-          <span class="pizza-price">16 €</span>
+          <span class="pizza-name">Burrata Pistache</span>
+          <span class="pizza-price">15 €</span>
         </div>
-        <div class="badges"></div>
-        <p class="ingredients">Salsa blanca, mozzarella, nueces, peras, gorgonzola, champiñones, perejil con ajo, magret de pato ahumado</p>
-      </div>
-
-      <!-- BARBECUE -->
-      <div class="pizza-card" data-tags="" data-img="barbecue.jpeg" data-name="Barbecue">
-        <div class="card-head">
-          <span class="pizza-name">Barbecue</span>
-          <span class="pizza-price">16 €</span>
+        <div class="badges">
+          <span class="badge b-veg">🌿 Vegetariana</span>
+          <span class="badge b-sig">⭐ Especial</span>
         </div>
-        <div class="badges"></div>
-        <p class="ingredients">Salsa de tomate, mozzarella, jamón, chorizo, pollo, panceta ahumada, salsa barbacoa, cebolla frita</p>
-      </div>
-
-      <!-- MOITIE MOITIE -->
-      <div class="pizza-card" data-tags="sig">
-        <div class="card-head">
-          <span class="pizza-name">Mitad / Mitad</span>
-          <span class="pizza-price">16 €</span>
-        </div>
-        <div class="badges"><span class="badge b-sig">⭐ Especial</span></div>
-        <p class="ingredients">Dos recetas a elegir en una sola pizza</p>
+        <p class="ingredients">Salsa blanca, mozzarella, cebolla confitada, champiñones, aceitunas <span class="ac">· después del horneado&nbsp;: burrata, pesto de pistacho, pistachos tostados</span></p>
       </div>
 
       <!-- L'EPHEMERE -->
@@ -806,18 +739,6 @@
         </div>
         <div class="badges"><span class="badge b-sig">⭐ Especial</span></div>
         <p class="ingredients">Para descubrir, según las estaciones y la inspiración de los chefs</p>
-      </div>
-
-      <!-- PIZZA PLAQUE -->
-      <div class="pizza-card plaque" data-tags="sig" data-img="plaque.jpg" data-name="Pizza Plaque">
-        <div>
-          <div class="card-head" style="margin-bottom:.5rem">
-            <span class="pizza-name">🍕 Pizza en Bandeja <small style="font-size:.78rem;font-weight:400;color:var(--muted)">(60 × 40 cm)</small></span>
-            <span class="pizza-price">Desde 35 €</span>
-          </div>
-          <div class="badges"><span class="badge b-sig">⭐ Bajo pedido</span></div>
-        </div>
-        <p class="ingredients" style="flex:1">Según las recetas disponibles — <strong style="color:var(--text)">debe reservarse con un mínimo de 3 días de antelación</strong></p>
       </div>
 
     </div><!-- /pizzas-grid -->
@@ -1011,7 +932,7 @@
       </a>
     </div>
 
-    <p class="contact-note">Los pedidos se pueden hacer durante todo el día. Reserva con antelación para las pizzas en bandeja (mínimo 3 días antes).</p>
+    <p class="contact-note">Los pedidos se pueden hacer durante todo el día.</p>
   </div>
 </section>
 
@@ -1072,9 +993,6 @@ filterBtns.forEach(btn => {
       const show = f === 'all' || tags.split(' ').includes(f);
       card.style.display = show ? '' : 'none';
     });
-    // Plaque card: only show when "all" or "sig"
-    document.querySelector('.pizza-card.plaque').style.display =
-      (f === 'all' || f === 'sig') ? '' : 'none';
   });
 });
 
